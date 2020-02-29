@@ -8,7 +8,9 @@
 //#include <avr/interrupt.h>
 
 #include "TinyTimber.h"
-#include "Pulse.h"
+//#include "GUI.h"
+//#include "Pulse.h"
+#include "interHandlers.h"
 #include "DediWriter.h"
 #include "LCD.h"
 #include <avr/io.h>
@@ -17,12 +19,12 @@
 int main(void)
 {
 	LCDInit();
-    pulse p = initPulse(0,0);
-	pulse q = initPulse(10,4);
-	activate(&p);
-	INSTALL(&p, addFreq, IRQ_PCINT1);
-	INSTALL(&q, addFreq, IRQ_PCINT1);
-	addFreq(&q);
+    pulse p = initPulse(0, 0);
+	pulse q = initPulse(30, 1);
+	GUI g = GUI_init(p, q);
+	INSTALL(&g, interHandlerFreq, IRQ_PCINT1);
+	return TINYTIMBER(&g, printActivePulse, NULL);
+	//addFreq(&q);
 	//printAt(getFreq(&p), getPos(&p));
 	//printAt(getFreq(&q), getPos(&q));
 }

@@ -1,4 +1,4 @@
-Pulse.d Pulse.o: .././Pulse.c .././Pulse.h \
+Pulse.d Pulse.o: .././Pulse.c .././Pulse.h .././TinyTimber.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
@@ -14,6 +14,8 @@ Pulse.d Pulse.o: .././Pulse.c .././Pulse.h \
  .././LCD.h
 
 .././Pulse.h:
+
+.././TinyTimber.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h:
 
