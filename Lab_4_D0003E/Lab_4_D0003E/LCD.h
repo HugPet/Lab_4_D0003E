@@ -12,10 +12,6 @@
 #ifndef LCD_H_
 #define LCD_H_
 
-
-void printAt(long num, int pos);
-void writeChar(char ch, int pos);
-int writeReg(int num, int reg, bool shift);
 void LCDInit();
 
 

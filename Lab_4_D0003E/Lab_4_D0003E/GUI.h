@@ -21,9 +21,10 @@ struct GUI_block {
 
 typedef struct GUI_block GUI;
 
-void interHandlerFreq(GUI *g, enum Vector v);
-void switchPulse(GUI *g);
-void printActivePulse(GUI *g);
+void interHandlerFreq(GUI *self, int arg);
+void interHandlerSwitch(GUI *self, int arg);
+void switchPulse(GUI *self);
+void printActivePulse(GUI *self);
 
 
 #endif /* GUI_H_ */

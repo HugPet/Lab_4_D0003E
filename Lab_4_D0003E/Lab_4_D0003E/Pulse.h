@@ -8,6 +8,7 @@
 // .h for pulse object
 
 #include "TinyTimber.h"
+#include "DediWriter.h"
 #include <stdbool.h>
 #include <avr/io.h>
 #ifndef PULSE_H_
@@ -25,12 +26,12 @@ struct pulse_block
 
 typedef struct pulse_block pulse;
 
-void subFreq(pulse *p);
-void addFreq(pulse *p);
-void storeFreq(pulse *p);
-void restoreFreq(pulse *p);
-int getFreq(pulse *p);
-
+void subFreq(pulse *self);
+void addFreq(pulse *self);
+void storeFreq(pulse *self);
+void restoreFreq(pulse *self);
+int getFreq(pulse *self);
+void printAt(pulse *self, int pos);
 
 
 #endif /* PULSE_H_ */

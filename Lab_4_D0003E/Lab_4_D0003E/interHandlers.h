@@ -11,8 +11,6 @@
 #ifndef INTERHANDLERS_H_
 #define INTERHANDLERS_H_
 
-//void interHandlerFreq(GUI *g, enum Vector v);
-
 
 
 #endif /* INTERHANDLERS_H_ */

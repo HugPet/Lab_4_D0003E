@@ -23,6 +23,7 @@ int main(void)
 	pulse q = initPulse(30, 1);
 	GUI g = GUI_init(p, q);
 	INSTALL(&g, interHandlerFreq, IRQ_PCINT1);
+	INSTALL(&g, interHandlerSwitch, IRQ_PCINT0);
 	return TINYTIMBER(&g, printActivePulse, NULL);
 	//addFreq(&q);
 	//printAt(getFreq(&p), getPos(&p));

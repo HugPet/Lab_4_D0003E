@@ -19,16 +19,15 @@ void LCDInit(void){
 	
 	TCCR1B = (0<<WGM13)|(1<<WGM12)|(0<<WGM11)|(0<<WGM10)|(1<<CS12)|(0<<CS11)|(1<<CS10);
 	
-	EIMSK |= (1<<PCIF1)|(1<<PCIF0);
-	PORTB = (1<<PB7)|(1<<PB6);
+	PCMSK0 = 0x0c;
+	PCMSK1 = 0xd0;
+	EIFR = 0xc0;
+	EIMSK = 0xc0;
+	PORTB = (1 << PB7)|(1 << PB6)|(1 << PB4);
+	PORTE = (1 << PE3)|(1 << PE2);
 	DDRB = (0<<DDB7)|(0<<DDB6);
 	MCUCR = (0 << PUD);
 }
 
-void printAt(long num, int pos) {
-	int pp = pos;
-	writeChar( (num % 100) / 10 + '0', pp);
-	pp++;
-	writeChar( num % 10 + '0', pp);
-}
+
 
