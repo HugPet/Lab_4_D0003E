@@ -6,8 +6,6 @@ DediWriter.c
 
 GUI.c
 
-interHandlers.c
-
 LCD.c
 
 main.c

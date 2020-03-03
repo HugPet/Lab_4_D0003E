@@ -14,7 +14,7 @@
 #ifndef PULSE_H_
 #define PULSE_H_
 #define NULL 0
-#define initPulse(r, t) {initObject(), r, 0, t}
+#define initPulse(r, t, i) {initObject(), r, 0, t, i}
 
 struct pulse_block 
 {
@@ -22,6 +22,7 @@ struct pulse_block
 	int freq;
 	int saved_freq;
 	int portNum;
+	int iD;
 };
 
 typedef struct pulse_block pulse;

@@ -32,6 +32,7 @@ void storeFreq(pulse *self) {
 void restoreFreq(pulse *self) {
 	self->freq = self->saved_freq;
 	self->saved_freq = 0;
+	
 }
 
 int getFreq(pulse *self) {

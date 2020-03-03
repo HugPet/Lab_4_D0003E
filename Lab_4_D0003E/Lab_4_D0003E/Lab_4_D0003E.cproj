@@ -150,12 +150,6 @@
     <Compile Include="GUI.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="interHandlers.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="interHandlers.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="LCD.c">
       <SubType>compile</SubType>
     </Compile>

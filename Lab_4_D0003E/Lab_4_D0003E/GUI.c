@@ -7,17 +7,18 @@
 
 #include "GUI.h"
 
-void switchPulse(GUI *g) {
-	if (g->pulseSwitch == 0) {
-		g->pulseSwitch = 1;
+void switchPulse(GUI *self) {
+	if (self->activePulse.iD == 0) {
+		self->activePulse = self->q;
 	} else {
-		g->pulseSwitch = 0;
+		self->activePulse = self->p;
 	}
 }
 
 
 void printActivePulse(GUI *self) {
-	if (self->pulseSwitch == 0) {
+	//ASYNC(&self->p, addFreq, NULL);
+	if (self->activePulse.iD == 0) {
 		LCDDR2 &= 0x9F;
 		LCDDR2 |= 0x06;
 	} else {
@@ -30,35 +31,56 @@ void printActivePulse(GUI *self) {
 
 void interHandlerSwitch(GUI *self, int arg) {
 	//printAt(11, 2);
-	if ((PINB >> 4) == 0 || (PINB >> 3) == 0) {
-		ASYNC(self, switchPulse, NULL);
+	if (((PINE >> 2) & 1) == 0 || ((PINE >> 3) & 1) == 0) {
+		SYNC(self, switchPulse, NULL);
 	}
 	ASYNC(self, printActivePulse, NULL);
 }
 
 void interHandlerFreq(GUI *self, int arg) {
-	int i = PINB & 0x40;
-	//printAt(22, 2);
-	pulse temp;
-	if (self->pulseSwitch == 0) {
-		temp = self->p;
-	} else {
-		temp = self->q;
-	}
-	
 	if (((PINB >> 6) & 1) == 0) {
 		//printAt(99, 2);
-		ASYNC(&temp, addFreq, NULL);
+		SYNC(&self->activePulse, addFreq, NULL);
+		ASYNC(self, pressing, NULL);
 		ASYNC(self, printActivePulse, NULL);
+		return;
 	} else if (((PINB >> 7) & 1) == 0) {
-			ASYNC(&temp, subFreq, NULL);
-	} else {
-		if (temp.freq != 0) {
-			ASYNC(&temp, storeFreq, NULL);
+		SYNC(&self->activePulse, subFreq, NULL);
+		ASYNC(self, pressing, NULL);
+		ASYNC(self, printActivePulse, NULL);
+		return;
+	} else if (((PINB >> 4) & 1) == 0) {
+		if (SYNC(&self->activePulse, getFreq, NULL) != 0) {
+			SYNC(&self->activePulse, storeFreq, NULL);
+			ASYNC(self, printActivePulse, NULL);
 		}
 		else {
-			ASYNC(&temp, restoreFreq, NULL);
+			SYNC(&self->activePulse, restoreFreq, NULL);
+			ASYNC(self, printActivePulse, NULL);
 		}
 	}
-	ASYNC(self, printActivePulse, NULL);
+}
+
+void pressing(GUI *self) {
+	if (self->heldU == false || self->heldD == false) {
+		if (((PINB >> 6) & 1) == 0) {self->heldU = true; }
+		else if (((PINB >> 7) & 1) == 0) {self->heldD = true; }
+		AFTER(MSEC(500), self, pressing, NULL);
+		return;
+	} else if (self->heldU || self->heldD) {
+		if (((PINB >> 6) & 1) == 0 && self->heldU) {
+			SYNC(&self->activePulse, addFreq, NULL);
+			ASYNC(self, printActivePulse, NULL);
+			AFTER(MSEC(100), self, pressing, NULL);
+			return;
+		} else if (((PINB >> 7) & 1) == 0 && self->heldD) {
+			SYNC(&self->activePulse, addFreq, NULL);
+			ASYNC(self, printActivePulse, NULL);
+			AFTER(MSEC(100), self, pressing, NULL);
+			return;
+		} else {
+			self->heldU = false;
+			self->heldD = false;
+		}
+	}
 }
