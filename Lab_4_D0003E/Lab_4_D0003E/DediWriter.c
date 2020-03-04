@@ -9,6 +9,60 @@
 
 #include "DediWriter.h"
 
+
+void writeToOsc(dediWrite *self) {
+	if (self->pOn) {
+		PORTE &= 0xEF;
+		PORTE |= (1 << self->p.portNum);
+	} else {
+		PORTE &= 0xEF;
+		PORTE |= (0 << self->p.portNum);
+	}
+	
+	if (self->qOn) {
+		PORTE &= 0xBF;
+		PORTE |= (1 << self->q.portNum);
+	} else {
+		PORTE &= 0xBF;
+		PORTE |= (0 << self->q.portNum);
+	}
+}
+
+void writeA(dediWrite *self) {
+	if (self->pOn) {
+		PORTE &= 0xEF;
+		PORTE |= (1 << self->p.portNum);
+	} else {
+		PORTE &= 0xEF;
+		PORTE |= (0 << self->p.portNum);
+	}
+	self->pOn = !self->pOn;
+	
+	//writeToOsc(self);
+	if (self->p.freq != 0) {
+		int tim = 1/2*(self->p.freq);
+		AFTER(SEC(tim), self, writeA, NULL);
+		return;
+	} AFTER(MSEC(400), self, writeA, NULL);
+}
+
+void writeB(dediWrite *self) {
+	self->qOn = !self->qOn;
+	if (self->qOn) {
+		PORTE &= 0xEF;
+		PORTE |= (1 << self->q.portNum);
+	} else {
+		PORTE &= 0xEF;
+		PORTE |= (0 << self->q.portNum);
+	}
+	//writeToOsc(self);
+	if (self->q.freq != 0) {
+		int tim = 1/2*(self->q.freq);
+		AFTER(SEC(tim), self, writeB, NULL);
+		return;
+	} AFTER(MSEC(400), self, writeB, NULL);
+}
+
 void writeChar(char ch, int pos){
 	DISABLE;
 	int SCC_X_0 = 0, SCC_X_1 = 0, SCC_X_2 = 0, SCC_X_3 = 0;
@@ -145,4 +199,14 @@ int writeReg(int num, int reg, bool shift){
 		reg |= (num<<4);
 	}
 	return reg;
+}
+
+void printAt(dediWrite *self) {
+	int *num1 = &self->p.freq;
+	int *num2 = &self->q.freq;
+	//writeChar( *num1 % 10 + '0', 2);
+	writeChar( (*num1 % 100) / 10 + '0', 0);
+	writeChar( (*num2 % 100) / 10 + '0', 4);
+	writeChar( *num1 % 10 + '0', 1);
+	writeChar( *num2 % 10 + '0', 5);
 }
