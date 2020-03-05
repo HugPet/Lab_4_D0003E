@@ -8,7 +8,7 @@
 // .c for pulse object
 
 #include "Pulse.h"
-
+#include "DediWriter.h"
 #include "LCD.h"
 
 
@@ -19,30 +19,32 @@ void subFreq(pulse *self) {
 }
 
 void addFreq(pulse *self) {
-	if (self->freq < 99) {
+	if (self->freq == 0) {
+		self->freq++;
+		AFTER((MSEC(500)/self->freq), self, writeToPort, NULL);
+	} else if (self->freq < 99){
 		self->freq++;
 	}
 }
 
 void storeFreq(pulse *self) {
-	self->saved_freq = self->freq;
-	self->freq = 0;
+	if (self->freq != 0){
+		self->saved_freq = self->freq;
+		self->freq = 0;
+	} else if (self->saved_freq != 0){
+		self->freq = self->saved_freq;
+		self->saved_freq = 0;
+		AFTER((MSEC(500)/self->freq), self, writeToPort, NULL);
+	}
 }
 
-void restoreFreq(pulse *self) {
-	self->freq = self->saved_freq;
-	self->saved_freq = 0;
-	
+void writeToPort(pulse *self){
+	if (self->freq != 0){
+		SYNC(self->writer, writePort, self->portNum);
+		AFTER((MSEC(500)/self->freq), self, writeToPort, NULL);
+	}
 }
 
 int getFreq(pulse *self) {
 	return self->freq;
-}
-
-void printAt(pulse *self, int pos) {
-	int num = self->freq;
-	int pp = pos;
-	writeChar( (num % 100) / 10 + '0', pp);
-	pp++;
-	writeChar( num % 10 + '0', pp);
 }

@@ -14,7 +14,7 @@
 #ifndef PULSE_H_
 #define PULSE_H_
 #define NULL 0
-#define initPulse(r, t, i) {initObject(), r, 0, t, i}
+#define initPulse(r, t, i, w) {initObject(), r, 0, t, i, w}
 
 struct pulse_block 
 {
@@ -23,6 +23,7 @@ struct pulse_block
 	int saved_freq;
 	int portNum;
 	int iD;
+	dediWrite *writer;
 };
 
 typedef struct pulse_block pulse;
@@ -30,9 +31,7 @@ typedef struct pulse_block pulse;
 void subFreq(pulse *self);
 void addFreq(pulse *self);
 void storeFreq(pulse *self);
-void restoreFreq(pulse *self);
 int getFreq(pulse *self);
-void printAt(pulse *self, int pos);
-
+void writeToPort(pulse *self);
 
 #endif /* PULSE_H_ */
