@@ -16,6 +16,9 @@ void subFreq(pulse *self) {
 	if (self->freq > 0) {
 		self->freq--;
 	}
+	if (self->freq == 0){
+		SYNC(self->writer, turnOffPort, self->portNum);
+	}
 }
 
 void addFreq(pulse *self) {
@@ -31,6 +34,7 @@ void storeFreq(pulse *self) {
 	if (self->freq != 0){
 		self->saved_freq = self->freq;
 		self->freq = 0;
+		SYNC(self->writer, turnOffPort, self->portNum);
 	} else if (self->saved_freq != 0){
 		self->freq = self->saved_freq;
 		self->saved_freq = 0;

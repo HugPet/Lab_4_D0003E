@@ -31,6 +31,7 @@ typedef struct DediWriter_block dediWrite;
 void writeChar(char ch, int pos);
 int writeReg(int num, int reg, bool shift);
 void writePort(dediWrite *self, int port);
+void turnOffPort(dediWrite *self, int port);
 
 
 #endif /* DEDIWRITER_H_ */

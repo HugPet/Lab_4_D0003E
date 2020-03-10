@@ -17,6 +17,14 @@ void writePort(dediWrite *self, int port){
 	}
 }
 
+void turnOffPort(dediWrite *self, int port){
+	if (port == 4){
+		PORTE &= ~(0x10);
+	} else if (port == 6){
+		PORTE &= ~(0x40);
+	}
+}
+
 void writeChar(char ch, int pos){
 	DISABLE;
 	int SCC_X_0 = 0, SCC_X_1 = 0, SCC_X_2 = 0, SCC_X_3 = 0;
